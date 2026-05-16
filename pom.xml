@@ -6,19 +6,15 @@
 
     <groupId>com.fidelis</groupId>
     <artifactId>sync-batch-data</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>sync-batch-data</name>
-    <description>Projeto Spring Batch para sincronização bidirecional de dados</description>
+    <version>1.0.0</version>
+    <name>Sync Batch Data - Bidirectional</name>
 
     <properties>
         <java.version>21</java.version>
         <spring-boot.version>3.4.1</spring-boot.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
-        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-batch</artifactId>
@@ -44,18 +40,17 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
-        <!-- Database -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
 
-        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
