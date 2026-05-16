@@ -1,23 +1,16 @@
-# Sync Batch Data - Sincronização Bidirecional
+# Sync Batch Data
 
-Projeto Spring Batch para sincronização de dados entre múltiplas fontes externas e base local.
+Projeto Spring Batch para sincronização bidirecional de dados com suporte a múltiplas fontes (H2, MSSQL, Oracle, DB2).
 
 ## Tecnologias
 - Java 21
 - Spring Boot 3.4+
 - Spring Batch 5
-- RabbitMQ (principal)
+- RabbitMQ
 - Dynamic DataSource Routing
-- Flyway
+- Grafana + Prometheus
 
-## Como rodar
-
+## Como Rodar
 ```bash
-docker-compose up -d
-./mvnw spring-boot:run
+docker-compose up --build
 ```
-
-Acesse:
-- App: http://localhost:8080
-- RabbitMQ: http://localhost:15672
-- Grafana: http://localhost:3001
