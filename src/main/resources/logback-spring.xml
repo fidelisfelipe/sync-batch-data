@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- Custom appender that feeds the intelligent monitoring agent -->
+    <appender name="SYNC_AGENT" class="com.fidelis.syncbatch.agent.LogEventAppender"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Capture all sync-batch logs into the agent queue (DEBUG+ for detail) -->
+    <logger name="com.fidelis.syncbatch" level="DEBUG" additivity="true">
+        <appender-ref ref="SYNC_AGENT"/>
+    </logger>
+
+    <springProfile name="dev">
+        <logger name="com.fidelis.syncbatch" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="SYNC_AGENT"/>
+        </logger>
+    </springProfile>
+</configuration>
