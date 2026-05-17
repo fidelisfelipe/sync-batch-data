@@ -1,0 +1,48 @@
+version: "3.9"
+
+# Standalone monitoring stack (Prometheus + Grafana).
+# Use this when the app is already running externally.
+# docker compose -f docker-compose.monitoring.yml up -d
+
+services:
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: sync-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    networks:
+      - monitoring-net
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: sync-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring-net
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  monitoring-net:
+    driver: bridge

@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testlocaldb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  batch:
+    jdbc:
+      initialize-schema: always
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
+datasources:
+  external:
+    source1:
+      url: jdbc:h2:mem:testsource1;DB_CLOSE_DELAY=-1;MODE=MySQL
+      username: sa
+      password: ""
+      driver-class-name: org.h2.Driver
+
+batch:
+  sync:
+    enabled: false
+    cron: "-"
+
+logging:
+  level:
+    com.fidelis.syncbatch: DEBUG
+    org.springframework.batch: INFO

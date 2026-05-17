@@ -1,0 +1,17 @@
+spring:
+  thymeleaf:
+    cache: false
+  jpa:
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    com.fidelis.syncbatch: DEBUG
+    org.springframework.batch: DEBUG
+
+batch:
+  sync:
+    enabled: false
