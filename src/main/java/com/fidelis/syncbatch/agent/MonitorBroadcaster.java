@@ -70,6 +70,26 @@ public class MonitorBroadcaster {
         emitters.removeAll(dead);
     }
 
+    public void broadcastEvent(String eventName, Object payload) {
+        if (emitters.isEmpty()) return;
+        String json;
+        try {
+            json = mapper.writeValueAsString(payload);
+        } catch (Exception e) {
+            log.warn("Failed to serialize event {}: {}", eventName, e.getMessage());
+            return;
+        }
+        List<SseEmitter> dead = new java.util.ArrayList<>();
+        for (SseEmitter emitter : emitters) {
+            try {
+                emitter.send(SseEmitter.event().name(eventName).data(json));
+            } catch (Exception e) {
+                dead.add(emitter);
+            }
+        }
+        emitters.removeAll(dead);
+    }
+
     public int activeClients() {
         return emitters.size();
     }

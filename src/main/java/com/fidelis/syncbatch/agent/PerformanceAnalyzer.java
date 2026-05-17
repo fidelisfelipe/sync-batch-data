@@ -142,6 +142,12 @@ public class PerformanceAnalyzer {
                 if (event.source() != null) {
                     sourceStatus.put(event.source(), "RUNNING");
                 }
+                boolean localToExt = event.jobName() != null && event.jobName().contains("localToExternal");
+                broadcaster.broadcastEvent("job-started", java.util.Map.of(
+                        "source",    String.valueOf(event.source()),
+                        "job",       String.valueOf(event.jobName()),
+                        "direction", localToExt ? "local-to-external" : "external-to-local"
+                ));
             }
             case JOB_COMPLETED -> {
                 jobsCompleted.incrementAndGet();
@@ -156,18 +162,33 @@ public class PerformanceAnalyzer {
                         recentDurations.addLast(event.durationMs());
                     }
                 }
+                broadcaster.broadcastEvent("job-completed", java.util.Map.of(
+                        "source",       String.valueOf(event.source()),
+                        "durationMs",   event.durationMs(),
+                        "throughput",   event.throughputPerSec(),
+                        "writeCount",   event.writeCount()
+                ));
             }
             case JOB_FAILED -> {
                 jobsFailed.incrementAndGet();
                 if (event.source() != null) {
                     sourceStatus.put(event.source(), "FAILED");
                 }
+                broadcaster.broadcastEvent("job-failed", java.util.Map.of(
+                        "source", String.valueOf(event.source())
+                ));
             }
             case STEP_COMPLETED -> {
                 totalRead.addAndGet(event.readCount());
                 totalWritten.addAndGet(event.writeCount());
                 totalFiltered.addAndGet(event.filterCount());
-                totalSkipped.addAndGet(event.filterCount()); // step skips
+                totalSkipped.addAndGet(event.filterCount());
+                broadcaster.broadcastEvent("step-progress", java.util.Map.of(
+                        "read",   event.readCount(),
+                        "write",  event.writeCount(),
+                        "filter", event.filterCount(),
+                        "source", String.valueOf(event.source())
+                ));
             }
             default -> {}
         }
